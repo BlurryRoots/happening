@@ -99,7 +99,7 @@
         public EventDispatcher () {
             this.subscribers = new List<EventCallback<TEventType>> ();
 
-            // Create the two event queues
+            // Create the two event queues for later swapping
             this.eventQueues = new Queue<TEventType>[2];
             this.eventQueues[0] = new Queue<TEventType> ();
             this.eventQueues[1] = new Queue<TEventType> ();
@@ -122,7 +122,7 @@
             while (0 < handlerList.Count) {
                 // Fetch handler
                 var handler = handlerList[0];
-                // Remove him from processing list
+                // Remove it from processing list
                 handlerList.RemoveAt (0);
 
                 // Invoke handler.
