@@ -20,7 +20,7 @@
 
             // If there has not yet been one single subscriber
             // to this type of event
-            if (!this.dispatchers.ContainsKey (eventType)) {
+            if (false == this.dispatchers.ContainsKey (eventType)) {
                 // Create a new dispatcher for it
                 this.dispatchers.Add (
                     eventType, new EventDispatcher<TEventType> ()
@@ -51,6 +51,7 @@
                     None registered previously!",
                     callback, eventType
                 );
+
                 throw new System.ArgumentException (msg, "TEventType");
             }
 
@@ -72,7 +73,7 @@
 
             // If there has not yet been one single subscriber to
             // this type of event
-            if (!this.dispatchers.ContainsKey (eventType)) {
+            if (false == this.dispatchers.ContainsKey (eventType)) {
                 // Exit without doing anything
                 return;
             }
@@ -101,7 +102,8 @@
         /// Creates a new EventManager.
         /// </summary>
         public EventHub () {
-            this.dispatchers = new Dictionary<System.Type, IEventDispatcher> ();
+            this.dispatchers = 
+                new Dictionary<System.Type, IEventDispatcher> ();
         }
 
         /// <summary>
