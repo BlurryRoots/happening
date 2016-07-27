@@ -11,7 +11,7 @@
         /// <summary>
         /// Returns the number of events currently waiting for processing.
         /// </summary>
-        public int CurrentlyRaisedEvents {
+        public int CurrentlyActiveEvents {
             get { return this.ActiveQueue.Count; }
         }
 
@@ -28,8 +28,10 @@
                     "Could not add {0}! Has already been subscribed before!",
                     callback
                 );
+
                 throw new System.Exception (msg);
             }
+
             // Add the callback to the list of subscribers
             this.subscribers.Add (callback);
         }
@@ -47,8 +49,10 @@
                     "Could not remove {0}! Has not been subcribed before!",
                     callback
                 );
+
                 throw new System.Exception (msg);
             }
+
             // Remove it
             this.subscribers.Remove (callback);
         }
@@ -74,16 +78,16 @@
         /// Dispatches event to all subscribers.
         /// </summary>
         public void DispatchAllRaisedEvents () {
-            // Get current active queue
-            var previouslyActiveQueue = this.ActiveQueue;
             // Swap active queue so that events producing new events
             // do not interfere with currently processed queue
             this.SwapActiveQueue ();
 
+            // Get current active queue
+            var processingQueue = this.InactiveQueue;
             // While there are still events in the queue
-            while (0 < previouslyActiveQueue.Count) {
+            while (0 < processingQueue.Count) {
                 // Remove from queue
-                var e = previouslyActiveQueue.Dequeue ();
+                var e = processingQueue.Dequeue ();
                 // And dispatch to subscribers
                 this.Dispatch (e);
             }
@@ -109,9 +113,10 @@
         /// </summary>
         /// <param name="e">Event to process.</param>
         private void Dispatch (TEventType e) {
-            // Make a copy of all handlers. It might be possible that handlers subscribe
-            // or unsubscribe while being processed.
-            var handlerList = new List<EventCallback<TEventType>> (this.subscribers);
+            // Make a copy of all handlers. It might be possible that
+            // handlers subscribe or unsubscribe while being processed.
+            var handlerList =
+                new List<EventCallback<TEventType>> (this.subscribers);
 
             // Let all handlers process the event.
             while (0 < handlerList.Count) {
@@ -125,13 +130,36 @@
             }
         }
 
+        /// <summary>
+        /// Signals the system to swap the currently active queue
+        /// </summary>
         private void SwapActiveQueue () {
             // Change index to 1 if 0 and to 0 if 1.
-            this.activeQueueIndex = 0 == this.activeQueueIndex ? 1 : 0;
+            if (0 == this.activeQueueIndex) {
+                this.activeQueueIndex = 1;
+            }
+            else if (1 == this.activeQueueIndex) {
+                this.activeQueueIndex = 0;
+            }
+            else {
+                throw new System.Exception (
+                    "activeQueueIndex should not have values other than 1 or 0"
+                );
+            }
         }
 
+        /// <summary>
+        /// Returns the currently active queue. (Used for external events)
+        /// </summary>
         private Queue<TEventType> ActiveQueue {
             get { return this.eventQueues[this.activeQueueIndex]; }
+        }
+
+        /// <summary>
+        /// Returns the currently inactive queue.
+        /// </summary>
+        private Queue<TEventType> InactiveQueue {
+            get { return this.eventQueues[1 - this.activeQueueIndex]; }
         }
 
         /// <summary>

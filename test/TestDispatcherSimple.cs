@@ -40,7 +40,7 @@
             Assert.IsTrue (hasBeenCalled,
                 "Delegate callback has not been called!"
             );
-            Assert.AreEqual (0, dispatcher.CurrentlyRaisedEvents);
+            Assert.AreEqual (0, dispatcher.CurrentlyActiveEvents);
         }
 
         [Test]
@@ -61,7 +61,7 @@
             Assert.IsTrue (hasBeenCalled,
                 "Delegate callback has not been called!"
             );
-            Assert.AreEqual (0, dispatcher.CurrentlyRaisedEvents);
+            Assert.AreEqual (0, dispatcher.CurrentlyActiveEvents);
         }
 
         [Test]
@@ -103,7 +103,7 @@
                 "Delegate callback has not been called!"
             );
 
-            Assert.AreEqual (1, dispatcher.CurrentlyRaisedEvents,
+            Assert.AreEqual (1, dispatcher.CurrentlyActiveEvents,
                 "There should be one event left in the queue!"
             );
         }
@@ -141,7 +141,7 @@
                 "Delegate callback has not been called!"
             );
 
-            Assert.AreEqual (1, dispatcher.CurrentlyRaisedEvents,
+            Assert.AreEqual (1, dispatcher.CurrentlyActiveEvents,
                 "There should be one event left in the queue!"
             );
         }
