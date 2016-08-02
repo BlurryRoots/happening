@@ -6,7 +6,7 @@
     public interface IEventDispatcher {
 
         /// <summary>
-        /// Dispatches all event raised within the context this dispatcher.
+        /// Dispatches all events raised within the context this dispatcher.
         /// </summary>
         void DispatchAllRaisedEvents ();
 
