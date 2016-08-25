@@ -21,9 +21,9 @@
             var dispatcher =
                 new EventDispatcher<TestEventTypeSimple> ();
 
-            var hasBeenCalled = false;
+            var hasBeenCalled = 0;
             dispatcher.Subscribe ((TestEventTypeSimple e) => {
-                hasBeenCalled = true;
+                ++hasBeenCalled;
             });
 
             dispatcher.Raise (new TestEventTypeSimple () {
@@ -31,13 +31,13 @@
                 name = "Großherzug Hans von Wurst"
             });
 
-            Assert.IsFalse (hasBeenCalled,
+            Assert.AreEqual (0, hasBeenCalled,
                 "Delegate should not have been called at this point!"
             );
 
             dispatcher.DispatchAllRaisedEvents ();
 
-            Assert.IsTrue (hasBeenCalled,
+            Assert.AreEqual (1, hasBeenCalled,
                 "Delegate callback has not been called!"
             );
             Assert.AreEqual (0, dispatcher.CurrentlyActiveEvents);
@@ -48,9 +48,9 @@
             var dispatcher =
                 new EventDispatcher<TestEventTypeSimple> ();
 
-            var hasBeenCalled = false;
+            var hasBeenCalled = 0;
             dispatcher.Subscribe ((TestEventTypeSimple e) => {
-                hasBeenCalled = true;
+                ++hasBeenCalled;
             });
 
             dispatcher.Fire (new TestEventTypeSimple () {
@@ -58,7 +58,7 @@
                 name = "Knurpselwums"
             });
 
-            Assert.IsTrue (hasBeenCalled,
+            Assert.AreEqual (1, hasBeenCalled,
                 "Delegate callback has not been called!"
             );
             Assert.AreEqual (0, dispatcher.CurrentlyActiveEvents);
@@ -69,7 +69,7 @@
             var dispatcher =
                 new EventDispatcher<TestEventTypeSimple> ();
 
-            var hasBeenCalled = false;
+            var hasBeenCalled = 0;
             dispatcher.Subscribe ((TestEventTypeSimple e) => {
                 dispatcher.Raise (new TestEventTypeSimple () {
                     id = 42,
@@ -78,7 +78,7 @@
             });
             dispatcher.Subscribe ((TestEventTypeSimple e) => {
                 if (42 == e.id && "Knurpselwums" == e.name) {
-                    hasBeenCalled = true;
+                    ++hasBeenCalled;
                 }
             });
 
@@ -87,19 +87,19 @@
                 name = "Großherzog Hans Hubertus von Wurst"
             });
 
-            Assert.IsFalse (hasBeenCalled,
+            Assert.AreEqual (0, hasBeenCalled,
                 "Delegate should not have been called at this point!"
             );
 
             dispatcher.DispatchAllRaisedEvents ();
 
-            Assert.IsFalse (hasBeenCalled,
-                "This should not happen :/"
+            Assert.AreEqual (0, hasBeenCalled,
+                "First event has already triggered the second one?!"
             );
 
             dispatcher.DispatchAllRaisedEvents ();
 
-            Assert.IsTrue (hasBeenCalled,
+            Assert.AreEqual (1, hasBeenCalled,
                 "Delegate callback has not been called!"
             );
 
@@ -113,7 +113,7 @@
             var dispatcher =
                 new EventDispatcher<TestEventTypeSimple> ();
 
-            var hasBeenCalled = false;
+            var hasBeenCalled = 0;
             dispatcher.Subscribe ((TestEventTypeSimple e) => {
                 dispatcher.Raise (new TestEventTypeSimple () {
                     id = 42,
@@ -122,7 +122,7 @@
             });
             dispatcher.Subscribe ((TestEventTypeSimple e) => {
                 if (42 == e.id && "Knurpselwums" == e.name) {
-                    hasBeenCalled = true;
+                    ++hasBeenCalled;
                 }
             });
 
@@ -131,13 +131,13 @@
                 name = "Großherzog Hans Hubertus von Wurst"
             });
 
-            Assert.IsFalse (hasBeenCalled,
+            Assert.AreEqual (0, hasBeenCalled,
                 "Delegate should not have been called at this point!"
             );
 
             dispatcher.DispatchAllRaisedEvents ();
 
-            Assert.IsTrue (hasBeenCalled,
+            Assert.AreEqual (1, hasBeenCalled,
                 "Delegate callback has not been called!"
             );
 
