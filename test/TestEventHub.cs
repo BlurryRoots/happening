@@ -57,6 +57,25 @@
         }
 
         [Test]
+        public void SubscribeAndFirePrimitve () {
+            var eventHub = new EventHub ();
+
+            var hasBeenCalled = 0;
+            EventCallback<int> callback =
+                (int e) => {
+                    ++hasBeenCalled;
+                };
+
+            eventHub.Subscribe (callback);
+
+            eventHub.Fire (1337);
+
+            Assert.AreEqual (1, hasBeenCalled,
+                "Delegate callback has not been called!"
+            );
+        }
+
+        [Test]
         public void SubscribeRaiseFireAndUnsubscribe () {
             var eventHub = new EventHub ();
 
