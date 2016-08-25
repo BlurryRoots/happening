@@ -4,7 +4,7 @@ A generic deffered event system.
 
 ## Details
 
-Happending supports raising and reacting to events based on class types.
+The system features a set of subsribe, publish and process functionallity. Happending supports raising and reacting to events based on types. These types can be primitives (e.g. integer), structs or classes.
 
 ### Subscribing
 
@@ -14,7 +14,7 @@ Let's assume you want to react to an object entering a trigger volume. When an o
 eventHub.Subscribe<TriggerEntered> (this.OnTrapTriggerEntered);
 ```
 
-### Raising an event
+### Raising events
 
 In another part of your application, you would then react to the physic calculations and raise the custom event ```TriggerEntered```.
 
