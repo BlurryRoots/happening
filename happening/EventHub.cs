@@ -86,6 +86,28 @@
         }
 
         /// <summary>
+        /// Immediatly processes the event.
+        /// </summary>
+        /// <typeparam name="TEventType">Type of event to raise.</typeparam>
+        /// <param name="e">New event.</param>
+        public void Fire<TEventType> (TEventType e) {
+            var eventType = typeof (TEventType);
+
+            // If there has not yet been one single subscriber to
+            // this type of event
+            if (false == this.dispatchers.ContainsKey (eventType)) {
+                // Exit without doing anything
+                return;
+            }
+
+            // Retrieve dispatcher responsible for this type of event
+            var dispatcher =
+                (EventDispatcher<TEventType>)this.dispatchers[eventType];
+            // Immediatly call all handlers for this type of event
+            dispatcher.Fire (e);
+        }
+
+        /// <summary>
         /// Dispatches all previously raised events.
         /// </summary>
         public void DispatchAllRaisedEvents () {
