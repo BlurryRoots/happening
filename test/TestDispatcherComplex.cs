@@ -21,20 +21,20 @@
             var dispatcher =
                 new EventDispatcher<TestEventTypeComplex> ();
 
-            var hasBeenCalled = false;
+            var hasBeenCalled = 0;
             dispatcher.Subscribe ((TestEventTypeComplex e) => {
-                hasBeenCalled = true;
+                ++hasBeenCalled;
             });
 
             dispatcher.Raise (new TestEventTypeComplex (08, 15));
 
-            Assert.IsFalse (hasBeenCalled,
+            Assert.AreEqual (0, hasBeenCalled,
                 "Delegate should not have been called at this point!"
             );
 
             dispatcher.DispatchAllRaisedEvents ();
 
-            Assert.IsTrue (hasBeenCalled,
+            Assert.AreEqual (1, hasBeenCalled,
                 "Delegate callback has not been called!"
             );
             Assert.AreEqual (0, dispatcher.CurrentlyActiveEvents);
@@ -45,14 +45,14 @@
             var dispatcher =
                 new EventDispatcher<TestEventTypeComplex> ();
 
-            var hasBeenCalled = false;
+            var hasBeenCalled = 0;
             dispatcher.Subscribe ((TestEventTypeComplex e) => {
-                hasBeenCalled = true;
+                ++hasBeenCalled;
             });
 
             dispatcher.Fire (new TestEventTypeComplex (08, 15));
 
-            Assert.IsTrue (hasBeenCalled,
+            Assert.AreEqual (1, hasBeenCalled,
                 "Delegate callback has not been called!"
             );
             Assert.AreEqual (0, dispatcher.CurrentlyActiveEvents);
@@ -63,31 +63,31 @@
             var dispatcher =
                 new EventDispatcher<TestEventTypeComplex> ();
 
-            var hasBeenCalled = false;
+            var hasBeenCalled = 0;
             dispatcher.Subscribe ((TestEventTypeComplex e) => {
                 dispatcher.Raise (new TestEventTypeComplex (27, 12));
             });
             dispatcher.Subscribe ((TestEventTypeComplex e) => {
                 if (27 == e.Dates[0] && 12 == e.Dates[1]) {
-                    hasBeenCalled = true;
+                    ++hasBeenCalled;
                 }
             });
 
             dispatcher.Raise (new TestEventTypeComplex (08, 15));
 
-            Assert.IsFalse (hasBeenCalled,
+            Assert.AreEqual (0, hasBeenCalled,
                 "Delegate should not have been called at this point!"
             );
 
             dispatcher.DispatchAllRaisedEvents ();
 
-            Assert.IsFalse (hasBeenCalled,
-                "This should not happen :/"
+            Assert.AreEqual (0, hasBeenCalled,
+                "First event has already triggered the second one?!"
             );
 
             dispatcher.DispatchAllRaisedEvents ();
 
-            Assert.IsTrue (hasBeenCalled,
+            Assert.AreEqual (1, hasBeenCalled,
                 "Delegate callback has not been called!"
             );
 
@@ -101,25 +101,25 @@
             var dispatcher =
                  new EventDispatcher<TestEventTypeComplex> ();
 
-            var hasBeenCalled = false;
+            var hasBeenCalled = 0;
             dispatcher.Subscribe ((TestEventTypeComplex e) => {
                 dispatcher.Raise (new TestEventTypeComplex (27, 12));
             });
             dispatcher.Subscribe ((TestEventTypeComplex e) => {
                 if (27 == e.Dates[0] && 12 == e.Dates[1]) {
-                    hasBeenCalled = true;
+                    ++hasBeenCalled;
                 }
             });
 
             dispatcher.Fire (new TestEventTypeComplex (08, 15));
 
-            Assert.IsFalse (hasBeenCalled,
+            Assert.AreEqual (0, hasBeenCalled,
                 "Delegate should not have been called at this point!"
             );
 
             dispatcher.DispatchAllRaisedEvents ();
 
-            Assert.IsTrue (hasBeenCalled,
+            Assert.AreEqual (1, hasBeenCalled,
                 "Delegate callback has not been called!"
             );
 
